@@ -1,0 +1,14 @@
+[project]
+name = "dou-utils"
+version = "0.1.0"
+description = "The utility package of Dou Co., Ltd."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = ["loguru>=0.7.2", "pydantic>=2.10.2"]
+
+[dependency-groups]
+dev = ["setuptools>=75.6.0", "wheel>=0.45.1"]
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
