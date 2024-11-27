@@ -45,7 +45,7 @@ logger.info(
         "event": "user_signup",
         "user_id": 12345,
     },
-    session_id="abcde12345",
+    search_id="abcde12345",
 )
 ```
 
