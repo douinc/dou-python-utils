@@ -3,6 +3,8 @@
 1. Installation
 
 ```bash
+# uv add git+https://github.com/douinc/dou-python-utils.git@[version_tag_name]
+
 uv add git+https://github.com/douinc/dou-python-utils.git@v0.1.0
 ```
 
