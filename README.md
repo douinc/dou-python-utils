@@ -1,14 +1,30 @@
-# DouLogger
+# dou-utils
+
+Composition of utils for Dou Inc. projects.
+
+## DouCLI
+
+Installs files for python formatting options.
+
+### Quickstart
+
+```bash
+# initiate project with `uv init`
+# add dou-utils with `uv add dou-utils`
+dou install formatting
+```
+
+## DouLogger
 
 A simple and flexible Python logging utility with enhanced features for structured logging.
 
-## Features
+### Features
 
 - **Easy-to-use logging methods**: `info`, `debug`, `warning`, `error`.
 - **Structured logging support**: Pass additional metadata with your log messages.
 - **Configurable logging levels**: Control the verbosity of your logs.
 
-## Installation
+### Installation
 
 Install DouLogger directly from the GitHub repository:
 
@@ -16,7 +32,7 @@ Install DouLogger directly from the GitHub repository:
 pip install git+https://github.com/douinc/dou-python-utils.git@v0.1.0
 ```
 
-### Quick Start
+#### Quick Start
 
 Import the logger from the dou package:
 
@@ -24,7 +40,7 @@ Import the logger from the dou package:
 from dou import logger
 ```
 
-### Basic Logging
+#### Basic Logging
 
 Log messages at different severity levels:
 
@@ -35,7 +51,7 @@ logger.warning("This is a warning message")
 logger.error("This is an error message")
 ```
 
-### Structured Logging
+#### Structured Logging
 
 Include additional metadata in your logs for better traceability:
 
@@ -49,10 +65,24 @@ logger.info(
 )
 ```
 
-### License
+## Development
+
+```bash
+uv build
+uv pip install -e .
+```
+
+## Publish
+
+```bash
+uv publish
+```
+
+## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-### Contact
+## Contact
 
 For questions or suggestions, please open an issue or contact us at team@dou.so
+
