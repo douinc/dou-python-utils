@@ -1,8 +1,9 @@
-from loguru import logger as loguru_logger
-import sys
 import os
-from typing import Dict, Any, Optional, Union
+import sys
 from json import dumps
+from typing import Any, Callable, Dict, Optional, Union
+
+from loguru import logger as loguru_logger
 from pydantic import BaseModel, Field
 
 
@@ -35,6 +36,7 @@ class _Logger:
             "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> | "
             "<level>{message}</level>",
         )
+        self._logger = loguru_logger
 
     def _log(
         self,
@@ -79,3 +81,28 @@ class _Logger:
         self, message: Union[str, Dict[str, Any]], search_id: Optional[str] = None
     ) -> None:
         self._log("ERROR", message, search_id)
+
+    def _log_dict(
+        self, log_method: Callable[[str], None], data_dict: Dict[str, Any]
+    ) -> None:
+        formatted_dict = dumps(data_dict, ensure_ascii=False, indent=4)
+        if log_method.__name__ == "error":
+            bound_logger = self._logger.bind().opt(
+                depth=2,
+                exception=True,
+            )
+        else:
+            bound_logger = self._logger.bind().opt(depth=2)
+        getattr(bound_logger, log_method.__name__)(formatted_dict)
+
+    def info_dict(self, data_dict: Dict[str, Any]) -> None:
+        self._log_dict(self._logger.info, data_dict)
+
+    def debug_dict(self, data_dict: Dict[str, Any]) -> None:
+        self._log_dict(self._logger.debug, data_dict)
+
+    def warning_dict(self, data_dict: Dict[str, Any]) -> None:
+        self._log_dict(self._logger.warning, data_dict)
+
+    def error_dict(self, data_dict: Dict[str, Any]) -> None:
+        self._log_dict(self._logger.error, data_dict)
