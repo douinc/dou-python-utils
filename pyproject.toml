@@ -1,6 +1,6 @@
 [project]
 name = "dou-utils"
-version = "0.1.4"
+version = "0.1.5"
 description = "The utility package of Dou Inc."
 readme = "README.md"
 requires-python = ">=3.10"
