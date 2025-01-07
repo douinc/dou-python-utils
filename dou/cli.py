@@ -66,18 +66,22 @@ dev = ["pre-commit>=4.0.1", "ruff>=0.8.1"]
 """
 PRE_COMMIT_CONFIG_CONTENT = """
 repos:
-  - repo: https://github.com/pre-commit/pre-commit-hooks
+-   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0
     hooks:
-      - id: trailing-whitespace
+    -   id: trailing-whitespace
         exclude: ^weekly/
-      - id: check-yaml
-      - id: check-json
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.7.4
-    hooks:
-      - id: ruff
-      - id: ruff-format
+    -   id: check-yaml
+    -   id: check-json
+    -   id: trailing-whitespace
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  # Ruff version.
+  rev: v0.7.4
+  hooks:
+    # Run the linter.
+    - id: ruff
+      args: [ --fix ]
+    - id: ruff-format
 """
 
 
