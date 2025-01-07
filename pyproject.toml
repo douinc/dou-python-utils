@@ -20,6 +20,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
 packages = ["dou"]
+license-files = ["LICENSE"]
 
 [dependency-groups]
 dev = [
