@@ -11,7 +11,6 @@ app.add_typer(install_app, name="install")
 
 PYPROJECT_TOML_CONTENT = """
 [tool.ruff]
-# Exclude commonly ignored directories.
 exclude = [
     ".bzr",
     ".direnv",
@@ -39,18 +38,16 @@ exclude = [
     "site-packages",
     "venv",
 ]
-
-# Same as Black.
 line-length = 88
-indent-width = 4
+indent-width=4
+target-version = "py311"
 
 [tool.ruff.lint]
+extend-select = ["I", "U"]
 select = ["E4", "E7", "E9", "F"]
 ignore = []
-
 fixable = ["ALL"]
 unfixable = []
-
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
 [tool.ruff.format]
@@ -58,29 +55,25 @@ quote-style = "double"
 indent-style = "space"
 skip-magic-trailing-comma = false
 line-ending = "auto"
-docstring-code-format = false
+docstring-code-format = true
 docstring-code-line-length = "dynamic"
-
-[dependency-groups]
-dev = ["pre-commit>=4.0.1", "ruff>=0.8.1"]
 """
 PRE_COMMIT_CONFIG_CONTENT = """
 repos:
--   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
-    hooks:
-    -   id: trailing-whitespace
-        exclude: ^weekly/
-    -   id: check-yaml
-    -   id: check-json
-    -   id: trailing-whitespace
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.6.0
+  hooks:
+  - id: trailing-whitespace
+    exclude: ^weekly/
+  - id: check-yaml
+  - id: check-json
+  - id: end-of-file-fixer
+  - id: trailing-whitespace
 - repo: https://github.com/astral-sh/ruff-pre-commit
-  # Ruff version.
   rev: v0.7.4
   hooks:
-    # Run the linter.
     - id: ruff
-      args: [ --fix ]
+      args: ["check", "--select", "I", "--fix"]
     - id: ruff-format
 """
 
