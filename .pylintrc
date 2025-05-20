@@ -1,0 +1,14 @@
+[MESSAGES CONTROL]
+disable=missing-function-docstring,
+        missing-module-docstring,
+        missing-class-docstring,
+        too-few-public-methods,
+        invalid-name,
+        broad-exception-raised,
+        assignment-from-none,
+        too-many-return-statements,
+        line-too-long
+
+[TYPECHECK]
+extension-pkg-allow-list=dependency_injector.providers,
+                         dependency_injector.containers

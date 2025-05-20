@@ -1,14 +1,14 @@
 [project]
 name = "dou-utils"
-version = "0.1.8"
+version = "0.1.9"
 description = "The utility package of Dou Inc."
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "loguru>=0.7.3",
-    "pydantic>=2.10.1",
+    "pydantic>=2.11.4",
     "toml>=0.10.2",
-    "typer>=0.13.0",
+    "typer>=0.15.4",
 ]
 
 [project.scripts]
@@ -20,13 +20,12 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
 packages = ["dou"]
-license-files = []
 
 [dependency-groups]
 dev = [
-    "pre-commit>=4.0.1",
-    "ruff>=0.8.1",
-    "setuptools>=75.6.0",
+    "pre-commit>=4.2.0",
+    "ruff>=0.11.10",
+    "setuptools>=80.7.1",
     "wheel>=0.45.1",
 ]
 
