@@ -5,4 +5,4 @@ __version__ = "0.1.0"
 
 __all__ = ["logger"]
 
-logger = _Logger()
+logger = _Logger().logger

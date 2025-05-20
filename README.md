@@ -11,7 +11,7 @@ Installs files for python formatting options.
 ```bash
 # initiate project with `uv init`
 # add dou-utils with `uv add dou-utils`
-dou install formatting
+dpu install formatting
 ```
 
 ## DouLogger

@@ -1,3 +1,3 @@
-from ._logger import _Logger
+from loguru._logger import Logger
 
-logger: _Logger
+logger: Logger

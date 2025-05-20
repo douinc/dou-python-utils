@@ -1,15 +1,7 @@
 import os
 import sys
-from json import dumps
-from typing import Any, Dict, Optional, Union
 
 from loguru import logger as loguru_logger
-from pydantic import BaseModel, Field
-
-
-class _Log(BaseModel):
-    search_id: Optional[str] = Field(None, description="검색 식별값")
-    message: Union[str, Dict[str, Any]] = Field(..., description="내용")
 
 
 class _Logger:
@@ -28,67 +20,33 @@ class _Logger:
             diagnose=False,
         )
 
-        loguru_logger.add(
-            sys.stdout,
-            colorize=True,
-            format="<green>{time:YYYY-MM-DD HH:mm:ss}</green> | "
-            "<level>{level}</level> | "
-            "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> | "
-            "<level>{message}</level>",
-        )
-        self._logger = loguru_logger
+        log_level = os.getenv("LOG_LEVEL", "DEBUG").upper()
+        serialize_logs = os.getenv("LOG_SERIALIZE", "false").lower() == "true"
+        log_sink_str = os.getenv("LOG_SINK", "stderr").lower()
 
-    def _log(
-        self,
-        level: str,
-        message: Any,
-        search_id: Optional[str] = None,
-    ) -> None:
-        valid_levels = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
-        if level.upper() not in valid_levels:
-            raise ValueError(f"Invalid log level: {level}")
-
-        if isinstance(message, str) and search_id is None:
-            formatted_message = message
-
-        elif isinstance(message, (dict, list)):
-            log_data = _Log(search_id=search_id, message=message)
-            formatted_message = dumps(log_data.model_dump(), ensure_ascii=False, indent=4)
-
-        elif isinstance(message, BaseModel):
-            log_data = _Log(search_id=search_id, message=message.model_dump())
-            formatted_message = dumps(log_data.model_dump(), ensure_ascii=False, indent=4)
-
-        elif hasattr(message, '__dict__'):
-            log_data = _Log(search_id=search_id, message=message.__dict__)
-            formatted_message = dumps(log_data.model_dump(), ensure_ascii=False, indent=4)
-
+        if log_sink_str == "stdout":
+            log_sink = sys.stdout
+        elif log_sink_str == "stderr":
+            log_sink = sys.stderr
         else:
-            formatted_message = str(message)
+            log_sink = log_sink_str
 
-        bound_logger = loguru_logger.bind().opt(depth=2)
-        if level.upper() == "ERROR":
-            bound_logger = bound_logger.opt(exception=True)
+        log_format = (
+            "{time} {level} {message} {extra}"  # JSON 형식
+            if serialize_logs
+            else "<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level> | <yellow>{extra}</yellow>"  # 가독성 좋은 텍스트 형식 (예시)
+        )
 
-        bound_logger.log(level.upper(), formatted_message)
+        loguru_logger.add(
+            log_sink,
+            level=log_level,  # 로그 레벨
+            format=log_format,  # 로그 포맷
+            serialize=serialize_logs,  # JSON 직렬화 여부
+            enqueue=True,  # 비동기 로깅 활성화 (I/O 블로킹 방지)
+            catch=True,
+        )
 
-    def info(
-        self, message: Any, search_id: Optional[str] = None
-    ) -> None:
-        self._log("INFO", message, search_id)
-
-    def debug(
-        self, message: Any, search_id: Optional[str] = None
-    ) -> None:
-        self._log("DEBUG", message, search_id)
-
-    def warning(
-        self, message: Any, search_id: Optional[str] = None
-    ) -> None:
-        self._log("WARNING", message, search_id)
-
-    def error(
-        self, message: Any, search_id: Optional[str] = None
-    ) -> None:
-        self._log("ERROR", message, search_id)
-
+        self.logger = loguru_logger
+        self.logger.info(
+            f"Logging setup complete. Level: {log_level}, Serialize: {serialize_logs}, Sink: {log_sink_str}"
+        )
